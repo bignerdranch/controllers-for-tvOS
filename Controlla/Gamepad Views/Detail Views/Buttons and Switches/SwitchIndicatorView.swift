@@ -13,10 +13,12 @@ import GameKit
 class SwitchIndicatorView: UILabel {
     public var input : GCControllerButtonInput? {
         willSet {
-            if newValue == nil {
-                input?.valueChangedHandler = nil
-            } else {
-                newValue?.valueChangedHandler = { _ in
+            // clear the old handler
+            if let control = input {
+                control.valueChangedHandler = nil
+            }
+            if let control = newValue {
+                control.valueChangedHandler = { _ in
                     self.fixColor()
                 }
             }
@@ -42,8 +44,7 @@ class SwitchIndicatorView: UILabel {
         var c = color
         if let input = input {
             if (input.isPressed) {
-                let comp = color.components
-                c = UIColor(red: comp.red/2.0, green: comp.green/2.0, blue: comp.blue/2.0, alpha: 1.0)
+                c = color / 2
             }
         }
         self.layer.backgroundColor = c.cgColor
@@ -79,5 +80,9 @@ extension UIColor {
     var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         let color = coreImageColor
         return (color.red, color.green, color.blue, color.alpha)
+    }
+    static func / (color: UIColor, value: CGFloat)-> UIColor {
+        let c = color.components
+        return UIColor(red: c.red/value, green: c.green/value, blue: c.blue/value, alpha: c.alpha)
     }
 }

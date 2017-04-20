@@ -77,7 +77,7 @@ public class ButtonPadView: UIView {
     
     override public func layoutSubviews() {
         super.layoutSubviews()
-        NSLog(" \(aButtonView.frame) in \(aButtonView.superview)")
+        NSLog(" \(String(describing:aButtonView.frame)) in \(String(describing:aButtonView.superview))")
     }
 
     override public func willMove(toSuperview superview: UIView?) {

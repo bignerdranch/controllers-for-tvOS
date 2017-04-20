@@ -44,57 +44,6 @@ class ViewController: GCEventViewController, UISearchResultsUpdating {
         stopWatchingForControllers()
     }
 
-    func startWatchingForControllers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.notify), name: .GCControllerDidConnect, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.notify), name: .GCControllerDidDisconnect, object: nil)
-        GCController.startWirelessControllerDiscovery(completionHandler: {})
-    }
-    
-    func stopWatchingForControllers() {
-        GCController.stopWirelessControllerDiscovery()
-    }
-    
-    func notify(note: Notification) {
-        if note.name == .GCControllerDidConnect {
-            if let ctrl = note.object as? GCController {
-                add(ctrl)
-            }
-        } else if note.name == .GCControllerDidDisconnect {
-            if let ctrl = note.object as? GCController {
-                remove(ctrl)
-            }
-        }
-    }
-    
-    func add(_ controller: GCController) {
-        controller.playerIndex = incrementPlayerIndex()
-        var gamepadView : UIView?
-        
-        if let gamepad = controller.extendedGamepad {
-            print("connect extended \(controller.vendorName)")
-            gamepadView = ExtendedGamepadView(gamepad: gamepad)
-        } else if let gamepad = controller.microGamepad {
-            print("connect micro \(controller.vendorName)")
-            gamepadView = MicroGamepadView(gamepad: gamepad)
-        } else {
-            print("Durp? \(controller.vendorName)")
-        }
-        
-        if let gamepadView = gamepadView {
-            gamepadMap[controller] = gamepadView
-            controllerStack.addArrangedSubview(gamepadView)
-        }
-
-    }
-    
-    func remove(_ controller: GCController) {
-        if let view = gamepadMap[controller] {
-            print("disconnect")
-            view.removeFromSuperview()
-            gamepadMap[controller] = nil
-        }
-    }
-    
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         var menuPressed = false
         for press in presses {
@@ -103,13 +52,14 @@ class ViewController: GCEventViewController, UISearchResultsUpdating {
             }
         }
         if (menuPressed) {
+            self.controllerUserInteractionEnabled = true
             let alert = UIAlertController(title: "Quit?", message: "You sure you're out?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Yep, I'm out", style: .default, handler: { _ in
-                self.controllerUserInteractionEnabled = true
+            alert.addAction(UIAlertAction(title: "Yep, I'm out", style: .default) { _ in
                 super.pressesBegan(presses, with: event)
+            })
+            alert.addAction(UIAlertAction(title: "Nevermind", style: .default) { _ in
                 self.controllerUserInteractionEnabled = false
-            }))
-            alert.addAction(UIAlertAction(title: "Nevermind", style: .default, handler: { _ in }))
+            })
             self.present(alert, animated: true, completion: nil)
         }
     }
@@ -129,7 +79,58 @@ class ViewController: GCEventViewController, UISearchResultsUpdating {
         }
         return playerIndex
     }
-    
-
 }
 
+extension ViewController { // controller detection
+    func startWatchingForControllers() {
+        let ctr = NotificationCenter.default
+        ctr.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) { note in
+            if let ctrl = note.object as? GCController {
+                self.add(ctrl)
+            }
+        }
+        ctr.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) { note in
+            if let ctrl = note.object as? GCController {
+                self.remove(ctrl)
+            }
+        }
+        GCController.startWirelessControllerDiscovery(completionHandler: {})
+    }
+
+    func stopWatchingForControllers() {
+        let ctr = NotificationCenter.default
+        ctr.removeObserver(self, name: .GCControllerDidConnect, object: nil)
+        ctr.removeObserver(self, name: .GCControllerDidDisconnect, object: nil)
+        GCController.stopWirelessControllerDiscovery()
+    }
+
+
+    func add(_ controller: GCController) {
+        controller.playerIndex = incrementPlayerIndex()
+        var gamepadView : UIView?
+
+        let name = String(describing:controller.vendorName)
+        if let gamepad = controller.extendedGamepad {
+            print("connect extended \(name)")
+            gamepadView = ExtendedGamepadView(gamepad: gamepad)
+        } else if let gamepad = controller.microGamepad {
+            print("connect micro \(name)")
+            gamepadView = MicroGamepadView(gamepad: gamepad)
+        } else {
+            print("Huh? \(name)")
+        }
+
+        if let gamepadView = gamepadView {
+            gamepadMap[controller] = gamepadView
+            controllerStack.addArrangedSubview(gamepadView)
+        }
+    }
+
+    func remove(_ controller: GCController) {
+        if let view = gamepadMap[controller] {
+            print("disconnect")
+            view.removeFromSuperview()
+            gamepadMap[controller] = nil
+        }
+    }
+}

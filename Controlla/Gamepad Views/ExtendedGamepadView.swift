@@ -42,6 +42,7 @@ public class ExtendedGamepadView: UIStackView {
     public convenience init(gamepad: GCExtendedGamepad) {
         self.init(frame: .zero)
         self.gamepad = gamepad
+        setup()
         assignGamepad()
     }
     
