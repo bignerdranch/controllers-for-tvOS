@@ -17,8 +17,8 @@ public class MicroGamepadView: UIStackView {
         }
     }
     
-    let aButtonView = SwitchIndicatorView.with("X", color: UIColor.yellow)
-    let xButtonView = SwitchIndicatorView.with("A", color: UIColor.red)
+    let aButtonView = ButtonIndicatorView.with("X", color: UIColor.yellow)
+    let xButtonView = ButtonIndicatorView.with("A", color: UIColor.red)
     let dPadView = DirectionPadView()
     let motionView = MotionView()
 
@@ -60,6 +60,32 @@ public class MicroGamepadView: UIStackView {
     
     func assignGamepad() {
         if let gamepad = gamepad {
+//            // method one
+//            gamepad.valueChangedHandler = { (gamepad, element) in
+//                if let dpad = element as? GCControllerDirectionPad {
+//                    print("CTRL : \( dpad )")
+//                } else {
+//                    print("OTHR : \( element )")
+//                }
+//            }
+//
+//            // method two
+//            gamepad.dpad.valueChangedHandler = { (dpad, xValue, yValue) in
+//                print("DPAD : \( dpad )")
+//            }
+//
+//            // method three
+//            gamepad.dpad.xAxis.valueChangedHandler = { (axis, value) in
+//                print("AXIS: \( axis ) -> \( value ) ")
+//            }
+//
+//            if let ctrl = gamepad.controller {
+//                ctrl.controllerPausedHandler = { controller in
+//                    // play/pause here
+//                    print("PLAY: \( controller ) ")
+//                }
+//            }
+
             dPadView.pad = gamepad.dpad
             aButtonView.input = gamepad.buttonA
             xButtonView.input = gamepad.buttonX

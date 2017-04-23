@@ -19,7 +19,7 @@
 		0EB1DE381E157225006F2D31 /* DirectionPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB1DE361E15712C006F2D31 /* DirectionPadView.swift */; };
 		0EB1DE391E157227006F2D31 /* XYPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB1DE301E1568D2006F2D31 /* XYPositionView.swift */; };
 		0EB1DE3A1E15722B006F2D31 /* ButtonPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB1DE341E156D2B006F2D31 /* ButtonPadView.swift */; };
-		0EB1DE3B1E157231006F2D31 /* SwitchIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB1DE321E156B97006F2D31 /* SwitchIndicatorView.swift */; };
+		0EB1DE3B1E157231006F2D31 /* ButtonIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB1DE321E156B97006F2D31 /* ButtonIndicatorView.swift */; };
 		0EB1DE3E1E15D443006F2D31 /* MicroGamepadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB1DE3C1E15D2FB006F2D31 /* MicroGamepadView.swift */; };
 		0ECB52DD1E16771500396C3F /* GamepadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB52DB1E1675CD00396C3F /* GamepadView.swift */; };
 		0ECB52E11E1677DC00396C3F /* UIView+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB52DF1E1677C700396C3F /* UIView+Utilities.swift */; };
@@ -63,7 +63,7 @@
 		0E9550BD1E1473EC0006FF11 /* GamepadViews.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GamepadViews.h; sourceTree = "<group>"; };
 		0E9550BE1E1473EC0006FF11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0EB1DE301E1568D2006F2D31 /* XYPositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XYPositionView.swift; sourceTree = "<group>"; };
-		0EB1DE321E156B97006F2D31 /* SwitchIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchIndicatorView.swift; sourceTree = "<group>"; };
+		0EB1DE321E156B97006F2D31 /* ButtonIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonIndicatorView.swift; sourceTree = "<group>"; };
 		0EB1DE341E156D2B006F2D31 /* ButtonPadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonPadView.swift; sourceTree = "<group>"; };
 		0EB1DE361E15712C006F2D31 /* DirectionPadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionPadView.swift; sourceTree = "<group>"; };
 		0EB1DE3C1E15D2FB006F2D31 /* MicroGamepadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicroGamepadView.swift; sourceTree = "<group>"; };
@@ -96,9 +96,8 @@
 			isa = PBXGroup;
 			children = (
 				0EB1DE341E156D2B006F2D31 /* ButtonPadView.swift */,
-				0EB1DE321E156B97006F2D31 /* SwitchIndicatorView.swift */,
+				0EB1DE321E156B97006F2D31 /* ButtonIndicatorView.swift */,
 			);
-			name = "Buttons and Switches";
 			path = "Buttons and Switches";
 			sourceTree = "<group>";
 		};
@@ -160,7 +159,6 @@
 				0EEED93F1E15DF5900C58A1C /* MotionView.swift */,
 				0EB1DE301E1568D2006F2D31 /* XYPositionView.swift */,
 			);
-			name = "Detail Views";
 			path = "Detail Views";
 			sourceTree = "<group>";
 		};
@@ -172,7 +170,6 @@
 				0ECB52DB1E1675CD00396C3F /* GamepadView.swift */,
 				0EB1DE3C1E15D2FB006F2D31 /* MicroGamepadView.swift */,
 			);
-			name = "Gamepad Views";
 			path = "Gamepad Views";
 			sourceTree = "<group>";
 		};
@@ -312,7 +309,7 @@
 				0EB1DE381E157225006F2D31 /* DirectionPadView.swift in Sources */,
 				0EB1DE3A1E15722B006F2D31 /* ButtonPadView.swift in Sources */,
 				0EB1DE3E1E15D443006F2D31 /* MicroGamepadView.swift in Sources */,
-				0EB1DE3B1E157231006F2D31 /* SwitchIndicatorView.swift in Sources */,
+				0EB1DE3B1E157231006F2D31 /* ButtonIndicatorView.swift in Sources */,
 				0ECB52DD1E16771500396C3F /* GamepadView.swift in Sources */,
 				0E9550C81E1473FC0006FF11 /* ExtendedGamepadView.swift in Sources */,
 			);

@@ -18,10 +18,10 @@ public class ExtendedGamepadView: UIStackView {
     }    
 
     let identifierLabel = UILabel()
-    let leftButtonView = SwitchIndicatorView.with("Left", color: UIColor.white)
-    let rightButtonView = SwitchIndicatorView.with("Right", color: UIColor.white)
-    let leftTriggerView = SwitchIndicatorView.with("Left", color: UIColor.yellow)
-    let rightTriggerView = SwitchIndicatorView.with("Right", color: UIColor.yellow)
+    let leftButtonView = ButtonIndicatorView.with("Left", color: UIColor.white)
+    let rightButtonView = ButtonIndicatorView.with("Right", color: UIColor.white)
+    let leftTriggerView = ButtonIndicatorView.with("Left", color: UIColor.yellow)
+    let rightTriggerView = ButtonIndicatorView.with("Right", color: UIColor.yellow)
     
     let leftThumbstickView = DirectionPadView()
     let leftDpadView = DirectionPadView()

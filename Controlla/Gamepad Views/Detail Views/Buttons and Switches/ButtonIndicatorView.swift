@@ -1,5 +1,5 @@
 //
-//  SwitchIndicatorView.swift
+//  ButtonIndicatorView.swift
 //  Controlla
 //
 //  Created by Steve Sparks on 12/29/16.
@@ -10,7 +10,7 @@ import UIKit
 import GameKit
 
 @IBDesignable
-class SwitchIndicatorView: UILabel {
+class ButtonIndicatorView: UILabel {
     public var input : GCControllerButtonInput? {
         willSet {
             // clear the old handler
@@ -57,8 +57,8 @@ class SwitchIndicatorView: UILabel {
         self.layer.cornerRadius = shortside / 2.0
     }
     
-    static func with(_ label: String, color: UIColor) -> SwitchIndicatorView {
-        let v = SwitchIndicatorView()
+    static func with(_ label: String, color: UIColor) -> ButtonIndicatorView {
+        let v = ButtonIndicatorView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.text = label
         v.textColor = color

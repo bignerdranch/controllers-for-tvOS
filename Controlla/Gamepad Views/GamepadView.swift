@@ -17,8 +17,8 @@ public class GamepadView: UIStackView {
     }
     
     let identifierLabel = UILabel()
-    let leftButtonView = SwitchIndicatorView.with("Left", color: UIColor.white)
-    let rightButtonView = SwitchIndicatorView.with("Right", color: UIColor.white)
+    let leftButtonView = ButtonIndicatorView.with("Left", color: UIColor.white)
+    let rightButtonView = ButtonIndicatorView.with("Right", color: UIColor.white)
     
     let dpadView = DirectionPadView()
     let buttonPad = ButtonPadView()

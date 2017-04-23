@@ -27,15 +27,6 @@ class ViewController: GCEventViewController, UISearchResultsUpdating {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.c = UISearchController(searchResultsController: self)
-            if let c = self.c {
-                let vc = UISearchContainerViewController(searchController: c)
-                self.leftContainer.addSubview(vc.view)
-                vc.view.frame = self.leftContainer.bounds
-                self.addChildViewController(vc)
-            }
-        }
         startWatchingForControllers()
     }
 
