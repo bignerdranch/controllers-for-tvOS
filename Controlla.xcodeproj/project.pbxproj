@@ -92,6 +92,7 @@
 		0ECB52DB1E1675CD00396C3F /* GamepadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamepadView.swift; sourceTree = "<group>"; };
 		0ECB52DF1E1677C700396C3F /* UIView+Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Utilities.swift"; sourceTree = "<group>"; };
 		0EEED93F1E15DF5900C58A1C /* MotionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionView.swift; sourceTree = "<group>"; };
+		EF03EB7523E0BBF000BDABB2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		EF994ED523BEB2AE008B2451 /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF994ED623BEB2AE008B2451 /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
 		EF994ED923BEB2AE008B2451 /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 		0E9550961E1470070006FF11 = {
 			isa = PBXGroup;
 			children = (
+				EF03EB7523E0BBF000BDABB2 /* README.md */,
 				0E9550A11E1470070006FF11 /* Controlla */,
 				EF994ED823BEB2AE008B2451 /* TopShelf */,
 				0E9550B11E1470130006FF11 /* Frameworks */,

@@ -1,4 +1,4 @@
-# controllers-for-tvOS
+# Controllers-for-tvOS
 Sample app for tvOS that reads game controllers
 
 # Fork changes
