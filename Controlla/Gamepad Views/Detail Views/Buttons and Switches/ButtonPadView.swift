@@ -13,10 +13,10 @@ import GameKit
 @IBDesignable
 public class ButtonPadView: UIView {
 
-    let aButtonView = ButtonIndicatorView.with("A", color: UIColor.red)
-    let bButtonView = ButtonIndicatorView.with("B", color: UIColor.green)
-    let xButtonView = ButtonIndicatorView.with("X", color: UIColor.yellow)
-    let yButtonView = ButtonIndicatorView.with("Y", color: UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0))
+    let aButtonView = ButtonIndicatorView.with("A", color: UIColor.green)
+    let bButtonView = ButtonIndicatorView.with("B", color: UIColor.red)
+    let xButtonView = ButtonIndicatorView.with("X", color: UIColor.blue)
+    let yButtonView = ButtonIndicatorView.with("Y", color: UIColor.yellow)
     
     var extendedGamepad : GCExtendedGamepad? {
         willSet {
@@ -77,7 +77,7 @@ public class ButtonPadView: UIView {
     
     override public func layoutSubviews() {
         super.layoutSubviews()
-        NSLog(" \(String(describing:aButtonView.frame)) in \(String(describing:aButtonView.superview))")
+        //NSLog(" \(String(describing:aButtonView.frame)) in \(String(describing:aButtonView.superview))")
     }
 
     override public func willMove(toSuperview superview: UIView?) {

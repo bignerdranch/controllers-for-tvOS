@@ -21,8 +21,8 @@ public class MotionView: XYPositionView {
     var motion : GCMotion? {
         willSet {
             if let m = newValue {
-                m.valueChangedHandler = { _ in
-                        self.updateMotion()
+                m.valueChangedHandler = {[weak self] _ in
+                    self?.updateMotion()
                 }
             } else {
                 motion?.valueChangedHandler = nil

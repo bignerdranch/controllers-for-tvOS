@@ -14,11 +14,11 @@ public class DirectionPadView: XYPositionView {
     var pad : GCControllerDirectionPad? {
         willSet {
             if let pad = newValue {
-                pad.xAxis.valueChangedHandler = { _ in
-                    self.readPad()
+                pad.xAxis.valueChangedHandler = {[weak self] _, _ in
+                    self?.readPad()
                 }
-                pad.yAxis.valueChangedHandler = { _ in
-                    self.readPad()
+                pad.yAxis.valueChangedHandler = {[weak self] _, _ in
+                    self?.readPad()
                 }
             } else {
                 pad?.xAxis.valueChangedHandler = nil

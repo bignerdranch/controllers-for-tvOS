@@ -3,6 +3,11 @@
     {
       "idiom" : "tv",
       "scale" : "1x"
+    },
+    {
+      "idiom" : "tv",
+      "filename" : "800px-Atari-2600-Joystick.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

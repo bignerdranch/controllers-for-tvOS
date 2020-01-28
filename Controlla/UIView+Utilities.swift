@@ -9,14 +9,20 @@
 import UIKit
 
 extension UIView {
-    func makeSquare(_ size : CGFloat = -1) {
-        let c = NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 1.0, constant: 0.0)
-        addConstraint(c)
-        if(size != -1) {
-            addConstraint(NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: size))
+    func set(width : CGFloat = -1, height : CGFloat = -1) {
+        if(width != -1) {
+            addConstraint(NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: width))
+        }
+        if(height != -1) {
+            addConstraint(NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: height))
         }
     }
     
+    func makeSquare(_ width : CGFloat = -1) {
+        addConstraint(NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: self, attribute: .height, multiplier:1.0, constant: 0.0))
+        set(width:width)
+    }
+
     func centerHorizontally() {
         if let superview = superview {
             let c = NSLayoutConstraint(item: self, attribute: .centerX, relatedBy: .equal, toItem: superview, attribute: .centerX, multiplier: 1.0, constant: 0.0)
@@ -35,7 +41,7 @@ extension UIView {
         }
     }
     
-    func pin(_ dimension : NSLayoutAttribute) {
+    func pin(_ dimension : NSLayoutConstraint.Attribute) {
         if let superview = superview {
             let c = NSLayoutConstraint(item: self, attribute: dimension, relatedBy: .equal, toItem: superview, attribute: dimension, multiplier: 1.0, constant: 0.0)
             superview.addConstraint(c)

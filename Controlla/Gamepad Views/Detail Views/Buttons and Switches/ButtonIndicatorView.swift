@@ -11,6 +11,8 @@ import GameKit
 
 @IBDesignable
 class ButtonIndicatorView: UILabel {
+    public var animateDuration = 0.0    // default to no animation
+    
     public var input : GCControllerButtonInput? {
         willSet {
             // clear the old handler
@@ -18,9 +20,13 @@ class ButtonIndicatorView: UILabel {
                 control.valueChangedHandler = nil
             }
             if let control = newValue {
-                control.valueChangedHandler = { _ in
-                    self.fixColor()
+                self.alpha = 1
+                control.pressedChangedHandler = {[weak self] _, _, _ in
+                    self?.fixColor()
                 }
+            }
+            else {
+                self.alpha = 0
             }
         }
     }
@@ -43,12 +49,11 @@ class ButtonIndicatorView: UILabel {
         // set my color
         var c = color
         if let input = input {
-            if (input.isPressed) {
-                c = color / 2
-            }
+            c = color * (0.25 + (1.0 - input.value) * 0.75)
         }
-        self.layer.backgroundColor = c.cgColor
-
+        UIView.animate(withDuration: self.animateDuration) {
+            self.layer.backgroundColor = c.cgColor
+        }
     }
     
     func roundMe() {
@@ -81,8 +86,15 @@ extension UIColor {
         let color = coreImageColor
         return (color.red, color.green, color.blue, color.alpha)
     }
-    static func / (color: UIColor, value: CGFloat)-> UIColor {
+    static func * (color: UIColor, value: CGFloat)-> UIColor {
         let c = color.components
-        return UIColor(red: c.red/value, green: c.green/value, blue: c.blue/value, alpha: c.alpha)
+        return UIColor(red: c.red * value, green: c.green * value, blue: c.blue * value, alpha: c.alpha)
+    }
+    static func * (color: UIColor, value: Float)-> UIColor {
+        return color * CGFloat(value)
+    }
+    static func / (color: UIColor, value: Float)-> UIColor {
+        return color * CGFloat(1.0 / value)
     }
 }
+
