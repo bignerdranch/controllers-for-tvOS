@@ -17,8 +17,8 @@ public class MicroGamepadView: UIStackView {
         }
     }
     
-    let aButtonView = ButtonIndicatorView.with("X", color: UIColor.blue)
-    let xButtonView = ButtonIndicatorView.with("A", color: UIColor.green)
+    let aButtonView = ButtonIndicatorView.with("A", color: UIColor.green)
+    let xButtonView = ButtonIndicatorView.with("X", color: UIColor.blue)
     let menuButtonView = ButtonIndicatorView.with("Menu", color: UIColor.yellow)
     let dPadView = DirectionPadView()
     let motionView = MotionView()

@@ -41,14 +41,13 @@ class ContentProvider: TVTopShelfContentProvider {
             return item
         }
         
+        // you would think GCController.controllers() would always have at least the Siri Remote, but sometimes it is empty
         if items.isEmpty {
             items += [Image.atari, Image.mfi, Image.xbox, Image.ps4, Image.siri].map() {url -> TVTopShelfSectionedItem in
                 let item = TVTopShelfSectionedItem(identifier:url)
-                item.title = "Wombat"
+                item.title = "Sample"
                 item.imageShape = .square
                 item.setImageURL(URL(string:url)!, for:.screenScale1x)
-                //item.displayAction = TVTopShelfAction(url: URL(string:"https://ToddLa.com")!)
-                //item.playAction = item.displayAction
                 return item
             }
         }
