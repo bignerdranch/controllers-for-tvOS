@@ -49,6 +49,7 @@ class ButtonIndicatorView: UILabel {
         // set my color
         var c = color
         if let input = input {
+            // if this input is a trigger, show the value not just isPressed
             c = color * (0.25 + (1.0 - input.value) * 0.75)
         } else {
             c = .black

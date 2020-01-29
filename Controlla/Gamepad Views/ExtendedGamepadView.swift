@@ -95,10 +95,6 @@ public class ExtendedGamepadView: UIStackView {
         buttonPad.makeSquare(200)
         motionView.makeSquare(200)
         
-        while subviews.count > 0 {
-            subviews.first?.removeFromSuperview()
-        }
-        
         addArrangedSubview(leftButtons)
         addArrangedSubview(menuButtons)
         addArrangedSubview(leftDpadView)
