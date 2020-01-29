@@ -50,6 +50,8 @@ class ButtonIndicatorView: UILabel {
         var c = color
         if let input = input {
             c = color * (0.25 + (1.0 - input.value) * 0.75)
+        } else {
+            c = .black
         }
         UIView.animate(withDuration: self.animateDuration) {
             self.layer.backgroundColor = c.cgColor
