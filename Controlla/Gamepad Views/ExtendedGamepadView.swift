@@ -18,11 +18,14 @@ public class ExtendedGamepadView: UIStackView {
     }    
 
     let identifierLabel = UILabel()
-    let leftButtonView = ButtonIndicatorView.with("Left", color: UIColor.white)
-    let rightButtonView = ButtonIndicatorView.with("Right", color: UIColor.white)
-    let leftTriggerView = ButtonIndicatorView.with("Left", color: UIColor.yellow)
-    let rightTriggerView = ButtonIndicatorView.with("Right", color: UIColor.yellow)
-    
+    let leftButtonView = ButtonIndicatorView.with("L1", color: UIColor.white)
+    let rightButtonView = ButtonIndicatorView.with("R1", color: UIColor.white)
+    let leftTriggerView = ButtonIndicatorView.with("L2", color: UIColor.yellow)
+    let rightTriggerView = ButtonIndicatorView.with("R2", color: UIColor.yellow)
+
+    let menuButtonView = ButtonIndicatorView.with("Menu", color: UIColor.yellow)
+    let optionsButtonView = ButtonIndicatorView.with("Options", color: UIColor.yellow)
+
     let leftThumbstickView = DirectionPadView()
     let leftDpadView = DirectionPadView()
     let rightThumbstickView = DirectionPadView()
@@ -42,7 +45,6 @@ public class ExtendedGamepadView: UIStackView {
     public convenience init(gamepad: GCExtendedGamepad) {
         self.init(frame: .zero)
         self.gamepad = gamepad
-        setup()
         assignGamepad()
     }
     
@@ -52,23 +54,28 @@ public class ExtendedGamepadView: UIStackView {
         
         let leftButtons = UIStackView(arrangedSubviews: [ leftButtonView, leftTriggerView])
         let rightButtons = UIStackView(arrangedSubviews: [rightButtonView, rightTriggerView])
-        
+        let menuButtons = UIStackView(arrangedSubviews: [menuButtonView, optionsButtonView])
+
         leftButtons.spacing = 12.0
         rightButtons.spacing = 12.0
-        
+        menuButtons.spacing = 12.0
+
         leftButtons.addConstraint(NSLayoutConstraint(item: leftButtonView, attribute: .height, relatedBy: .equal, toItem: leftTriggerView, attribute: .height, multiplier: 1.0, constant: 0.0))
         rightButtons.addConstraint(NSLayoutConstraint(item: rightButtonView, attribute: .height, relatedBy: .equal, toItem: rightTriggerView, attribute: .height, multiplier: 1.0, constant: 0.0))
-        
-        
+        menuButtons.addConstraint(NSLayoutConstraint(item: menuButtonView, attribute: .height, relatedBy: .equal, toItem: optionsButtonView, attribute: .height, multiplier: 1.0, constant: 0.0))
+
         leftButtons.makeSquare(200)
         leftButtons.axis = .vertical
         rightButtons.makeSquare(200)
         rightButtons.axis = .vertical
-        
+        menuButtons.makeSquare(200)
+        menuButtons.axis = .vertical
+
         leftDpadView.dotColor = UIColor.red
         
         leftThumbstickView.makeSquare(200)
         leftThumbstickView.dotsize = 50
+        leftThumbstickView.dotColor = .lightGray
         var l = leftThumbstickView.circleLayer
         l.shadowRadius = 20
         l.shadowColor = UIColor.black.cgColor
@@ -77,6 +84,7 @@ public class ExtendedGamepadView: UIStackView {
         
         rightThumbstickView.dotsize = 50
         rightThumbstickView.makeSquare(200)
+        rightThumbstickView.dotColor = .lightGray
         l = rightThumbstickView.circleLayer
         l.shadowRadius = 20
         l.shadowColor = UIColor.black.cgColor
@@ -87,7 +95,12 @@ public class ExtendedGamepadView: UIStackView {
         buttonPad.makeSquare(200)
         motionView.makeSquare(200)
         
+        while subviews.count > 0 {
+            subviews.first?.removeFromSuperview()
+        }
+        
         addArrangedSubview(leftButtons)
+        addArrangedSubview(menuButtons)
         addArrangedSubview(leftDpadView)
         addArrangedSubview(leftThumbstickView)
         addArrangedSubview(rightThumbstickView)
@@ -104,12 +117,26 @@ public class ExtendedGamepadView: UIStackView {
             leftTriggerView.input = gamepad.leftTrigger
             rightButtonView.input = gamepad.rightShoulder
             rightTriggerView.input = gamepad.rightTrigger
+            if #available(tvOS 13.0, *) {
+                menuButtonView.input = gamepad.buttonMenu
+                optionsButtonView.input = gamepad.buttonOptions
+            }
+            else {
+                menuButtonView.superview?.removeFromSuperview()
+            }
             leftDpadView.pad = gamepad.dpad
+            
+            motionView.removeFromSuperview()
             if let motion = gamepad.controller?.motion {
+                addArrangedSubview(motionView)
                 motionView.motion = motion
-                motionView.alpha = 1
-            } else {
-                motionView.alpha = 0
+            }
+            
+            gamepad.leftThumbstickButton?.valueChangedHandler = {[weak self] button, value, pressed in
+                self?.leftThumbstickView.dotColor = pressed ? .white : .lightGray
+            }
+            gamepad.rightThumbstickButton?.valueChangedHandler = {[weak self] button, value, pressed in
+                self?.rightThumbstickView.dotColor = pressed ? .white : .lightGray
             }
         } else {
             leftThumbstickView.pad = nil
@@ -120,7 +147,6 @@ public class ExtendedGamepadView: UIStackView {
             rightTriggerView.input = nil
             leftDpadView.pad = nil
             motionView.motion = nil
-            motionView.alpha = 0
         }
         buttonPad.extendedGamepad = gamepad
     }

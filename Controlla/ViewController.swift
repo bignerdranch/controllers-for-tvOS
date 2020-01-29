@@ -10,16 +10,10 @@ import UIKit
 import GameKit
 import GamepadViews
 
-class ViewController: GCEventViewController, UISearchResultsUpdating {
+class ViewController: GCEventViewController {
     @IBOutlet weak var controllerStack: UIStackView!
-    @IBOutlet weak var leftContainer: UIView!
     
-    var gamepadMap : [NSObject : UIView] = [:]
-    var c : UISearchController?
-
-    public func updateSearchResults(for searchController: UISearchController) {
-        
-    }
+    var gamepadMap : [GCController : UIView] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,13 +22,16 @@ class ViewController: GCEventViewController, UISearchResultsUpdating {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startWatchingForControllers()
+        UIApplication.shared.isIdleTimerDisabled = true
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopWatchingForControllers()
+        UIApplication.shared.isIdleTimerDisabled = false
     }
-
+    
+    /* we dont need to do things like this, you can just use the menuButton handler
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         var menuPressed = false
         for press in presses {
@@ -54,10 +51,11 @@ class ViewController: GCEventViewController, UISearchResultsUpdating {
             self.present(alert, animated: true, completion: nil)
         }
     }
+    */
     
-    var playerIndex = GCControllerPlayerIndex.index1
+    var playerIndex = GCControllerPlayerIndex.indexUnset
     
-    func incrementPlayerIndex() -> GCControllerPlayerIndex {
+    func nextPlayerIndex() -> GCControllerPlayerIndex {
         switch playerIndex {
         case .index1:
             playerIndex = .index2
@@ -74,54 +72,103 @@ class ViewController: GCEventViewController, UISearchResultsUpdating {
 
 extension ViewController { // controller detection
     func startWatchingForControllers() {
-        let ctr = NotificationCenter.default
-        ctr.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) { note in
-            if let ctrl = note.object as? GCController {
-                self.add(ctrl)
-            }
+        NotificationCenter.default.addObserver(self, selector:#selector(controllerDidConnect(note:)), name:.GCControllerDidConnect, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(controllerDidConnect(note:)), name:.GCControllerDidDisconnect, object: nil)
+        if GCController.controllers().count == 0 {
+            GCController.startWirelessControllerDiscovery()
+        } else {
+            self.updateControllers()
         }
-        ctr.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) { note in
-            if let ctrl = note.object as? GCController {
-                self.remove(ctrl)
-            }
-        }
-        GCController.startWirelessControllerDiscovery(completionHandler: {})
     }
 
     func stopWatchingForControllers() {
-        let ctr = NotificationCenter.default
-        ctr.removeObserver(self, name: .GCControllerDidConnect, object: nil)
-        ctr.removeObserver(self, name: .GCControllerDidDisconnect, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .GCControllerDidConnect, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .GCControllerDidDisconnect, object: nil)
         GCController.stopWirelessControllerDiscovery()
     }
+    
+    @objc func controllerDidConnect(note:NSNotification) {
+        guard let controller = note.object as? GCController else {return}
+        if gamepadMap[controller] == nil {
+            self.updateControllers()
+        }
+    }
+    @objc func controllerDidDisconnect(note:NSNotification) {
+        guard let _ = note.object as? GCController else {return}
+        self.updateControllers()
+    }
 
+    //
+    func updateControllers() {
+        
+        // remove all our current controllers, and make a whole new list
+        for controller in Array(gamepadMap.keys) {
+            self.remove(controller)
+        }
+        
+        // build a brand new list of controllers, and give priority to exetended (ie non siri-remote) ones first.
+        self.playerIndex = .indexUnset
+        for controller in GCController.controllers().filter({$0.extendedGamepad != nil}) {
+            self.add(controller)
+        }
+        for controller in GCController.controllers().filter({$0.extendedGamepad == nil}) {
+            self.add(controller)
+        }
+    }
 
     func add(_ controller: GCController) {
-        controller.playerIndex = incrementPlayerIndex()
         var gamepadView : UIView?
 
-        let name = String(describing:controller.vendorName)
+        var name = controller.vendorName ?? "Unknown Vendor"
+        
+        if #available(tvOS 13.0, *) {
+            name += " (\(controller.productCategory))"
+        }
+
         if let gamepad = controller.extendedGamepad {
             print("connect extended \(name)")
             gamepadView = ExtendedGamepadView(gamepad: gamepad)
         } else if let gamepad = controller.microGamepad {
             print("connect micro \(name)")
+            gamepad.allowsRotation = true
+            gamepad.reportsAbsoluteDpadValues = false
             gamepadView = MicroGamepadView(gamepad: gamepad)
         } else {
             print("Huh? \(name)")
         }
 
         if let gamepadView = gamepadView {
-            gamepadMap[controller] = gamepadView
-            controllerStack.addArrangedSubview(gamepadView)
+            controller.playerIndex = nextPlayerIndex()
+
+            let text = "Player \(controller.playerIndex.rawValue+1): \(name)"
+            let titleView = UILabel(text:text, color:.white, font:UIFont.preferredFont(forTextStyle:.headline))
+            let view = UIStackView(arrangedSubviews:[titleView, gamepadView])
+            view.axis = .vertical
+            view.alignment = .center
+            view.distribution = .equalSpacing
+            view.spacing = 4.0
+            
+            gamepadMap[controller] = view
+            controllerStack.addArrangedSubview(view)
         }
     }
 
     func remove(_ controller: GCController) {
         if let view = gamepadMap[controller] {
-            print("disconnect")
+            print("disconnect: \(controller.vendorName ?? "")")
             view.removeFromSuperview()
             gamepadMap[controller] = nil
         }
+    }
+}
+
+private extension UILabel {
+    convenience init(text:String, color:UIColor? = nil, background:UIColor? = .clear, font:UIFont? = nil, align:NSTextAlignment = .left) {
+        self.init()
+        self.text = text
+        self.textColor = color
+        self.backgroundColor = background
+        self.textAlignment = align
+        self.font = font
     }
 }

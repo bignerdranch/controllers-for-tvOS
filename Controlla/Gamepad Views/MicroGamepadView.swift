@@ -17,8 +17,9 @@ public class MicroGamepadView: UIStackView {
         }
     }
     
-    let aButtonView = ButtonIndicatorView.with("X", color: UIColor.yellow)
-    let xButtonView = ButtonIndicatorView.with("A", color: UIColor.red)
+    let aButtonView = ButtonIndicatorView.with("X", color: UIColor.blue)
+    let xButtonView = ButtonIndicatorView.with("A", color: UIColor.green)
+    let menuButtonView = ButtonIndicatorView.with("Menu", color: UIColor.yellow)
     let dPadView = DirectionPadView()
     let motionView = MotionView()
 
@@ -40,6 +41,7 @@ public class MicroGamepadView: UIStackView {
 
     func setup() {
         self.axis = .horizontal
+        self.alignment = .top
         self.spacing = 24.0
         
         let buttons = UIStackView(arrangedSubviews: [aButtonView, xButtonView])
@@ -48,14 +50,18 @@ public class MicroGamepadView: UIStackView {
         buttons.makeSquare(200)
         buttons.addConstraint(NSLayoutConstraint(item: aButtonView, attribute: .height, relatedBy: .equal, toItem: xButtonView, attribute: .height, multiplier: 1.0, constant: 0.0))
         
+        menuButtonView.set(width:200, height:100)
+        // MENU button gets pressed and released so fast on the siri-remote, slow down the color change
+        menuButtonView.animateDuration = 1.5
+        
         dPadView.dotColor = UIColor.red
         dPadView.makeSquare(200)
         motionView.makeSquare(200)
         
         addArrangedSubview(buttons)
+        addArrangedSubview(menuButtonView)
         addArrangedSubview(dPadView)
         addArrangedSubview(motionView)
-
     }
     
     func assignGamepad() {
@@ -89,19 +95,23 @@ public class MicroGamepadView: UIStackView {
             dPadView.pad = gamepad.dpad
             aButtonView.input = gamepad.buttonA
             xButtonView.input = gamepad.buttonX
-            if let motion = gamepad.controller?.motion {
-                motionView.motion = motion
-                motionView.alpha = 1
+            
+            if #available(tvOS 13.0, *) {
+                menuButtonView.input = gamepad.buttonMenu
             } else {
-                motionView.motion = nil
-                motionView.alpha = 0
+                menuButtonView.removeFromSuperview()
+            }
+            
+            motionView.removeFromSuperview()
+            if let motion = gamepad.controller?.motion {
+                addArrangedSubview(motionView)
+                motionView.motion = motion
             }
         } else {
             dPadView.pad = nil
             aButtonView.input = nil
             xButtonView.input = nil
             motionView.motion = nil
-            motionView.alpha = 0
         }
     }
     

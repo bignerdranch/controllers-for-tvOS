@@ -34,6 +34,12 @@ public class GamepadView: UIStackView {
         setup()
     }
     
+    public convenience init(gamepad: GCGamepad) {
+        self.init(frame: .zero)
+        self.gamepad = gamepad
+        assignGamepad()
+    }
+    
     func setup() {
         self.axis = .horizontal
         self.spacing = 24.0
